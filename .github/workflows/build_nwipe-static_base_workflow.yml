@@ -1,0 +1,51 @@
+name: Build nwipe-static Base Workflow
+
+on:
+  workflow_call:
+    inputs:
+      arch:
+        required: true
+        type: string
+
+jobs:
+  build-nwipe-static:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./
+      NWIPE_VERSION: 0.38
+      PARTED_VERSION: 3.6
+    defaults:
+      run:
+        working-directory: ${{ env.working-directory }}
+
+    steps:
+      - uses: actions/checkout@v4.1.6
+
+      - name: Install buildah
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y buildah qemu-user-static
+
+      - name: Build the nwipe-static
+        run: |
+          ./buildah_nwipe_static.sh ${{ inputs.arch }}
+
+      - name: Install b2sum
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y coreutils
+
+      - name: Calculate b2sum
+        run: |
+          b2sum out/* > out/nwipe-static-${{ env.NWIPE_VERSION }}-${{ inputs.arch }}.b2sum
+
+      - name: Make release nwipe-static tarball
+        run: |
+          /bin/tar clJf nwipe-static-${{ env.NWIPE_VERSION }}-${{ inputs.arch }}.tar.xz out/*
+
+      - name: Upload the nwipe-static tarball
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: nwipe-static-${{ env.NWIPE_VERSION }}-${{ inputs.arch }}.tar.xz
+          path: ${{ env.working-directory }}/nwipe-static-${{ env.NWIPE_VERSION }}-${{ inputs.arch }}.tar.xz
+          retention-days: 1

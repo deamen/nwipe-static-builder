@@ -1,0 +1,27 @@
+name: Build nwipe-static workflow
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**'
+      - '.github/workflows/build_nwipe-static_workflow.yml'
+      - '.github/workflows/build_nwipe-static_base_workflow.yml'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**'
+      - '.github/workflows/build_nwipe-static_workflow.yml'
+      - '.github/workflows/build_nwipe-static_base_workflow.yml'
+  workflow_dispatch:
+
+jobs:
+  build-nwipe-static:
+    strategy:
+      matrix:
+        arch: [amd64]
+    uses: ./.github/workflows/build_nwipe-static_base_workflow.yml
+    with:
+      arch: ${{ matrix.arch }}
