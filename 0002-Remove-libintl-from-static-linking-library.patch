@@ -1,0 +1,30 @@
+From 16d988557785f0f42683f49dcf02e0e8edbf170c Mon Sep 17 00:00:00 2001
+From: Song Tang <stang@mmz.au>
+Date: Wed, 9 Apr 2025 13:22:08 +1000
+Subject: [PATCH 2/2] Remove libintl from static linking library
+
+It is not needed with parted-3.6
+---
+ configure.ac | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 98b03f1..f513554 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -69,10 +69,9 @@ PKG_CHECK_MODULES(
+
+ # Libraries needed for static linking with parted
+ if echo "$LDFLAGS" | grep -q "static"; then
+-	AC_CHECK_LIB([intl], [libintl_dgettext])
+-	AC_CHECK_LIB([uuid], [uuid_generate])
+-	AC_CHECK_LIB([devmapper], [dm_task_create], [LIBS="-ldevmapper $LIBS"], [AC_MSG_ERROR([devmapper library not found])])
+-	AC_CHECK_LIB([blkid], [blkid_new_probe], [LIBS="-lblkid $LIBS"], [AC_MSG_ERROR([blkid library not found])])
++	AC_CHECK_LIB([uuid], [uuid_generate], [LIBS="-luuid $LIBS"], [AC_MSG_ERROR([libuuid is required for static linking but not found])])
++	AC_CHECK_LIB([devmapper], [dm_task_create], [LIBS="-ldevmapper $LIBS"], [AC_MSG_ERROR([libdevmapper is required for static linking but not found])])
++	AC_CHECK_LIB([blkid], [blkid_new_probe], [LIBS="-lblkid $LIBS"], [AC_MSG_ERROR([libblkid is required for static linking but not found])])
+ fi
+
+ PKG_CHECK_MODULES([PARTED], [libparted])
+--
+2.43.5
