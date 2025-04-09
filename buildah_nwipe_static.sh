@@ -10,7 +10,7 @@ NWIPE_VERSION=${NWIPE_VERSION:-0.38}
 PARTED_VERSION=${PARTED_VERSION:-3.6}
 
 # Create the build container
-ctr=$(buildah from --arch $ARCH quay.io/deamen/alpine-base:latest)
+export ctr=$(buildah from --arch $ARCH quay.io/deamen/alpine-base:latest)
 buildah config --label maintainer="Song Tang" $ctr
 
 # Install base build tools and dependencies
@@ -56,7 +56,6 @@ cat << 'EOF' >> $copy_script
 #!/bin/sh
 mnt=$(buildah mount $ctr)
 cp $mnt/$1 ./out/$2
-echo $mnt
 buildah umount $ctr
 EOF
 chmod a+x $copy_script
