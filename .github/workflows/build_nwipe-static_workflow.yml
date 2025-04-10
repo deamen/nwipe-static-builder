@@ -21,7 +21,7 @@ jobs:
   build-nwipe-static:
     strategy:
       matrix:
-        arch: [amd64]
+        arch: [amd64,arm64]
     uses: ./.github/workflows/build_nwipe-static_base_workflow.yml
     with:
       arch: ${{ matrix.arch }}
