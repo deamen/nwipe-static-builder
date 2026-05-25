@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0  # Use the ref you want to point at
+  rev: v6.0.0  # Use the ref you want to point at
   hooks:
       - id: trailing-whitespace
       - id: check-yaml
@@ -25,12 +25,12 @@ repos:
     - id: dos2unix
 
 - repo: https://github.com/gitleaks/gitleaks
-  rev: v8.28.0
+  rev: v8.30.0
   hooks:
     - id: gitleaks
 
 - repo: https://github.com/psf/black-pre-commit-mirror
-  rev: 25.1.0
+  rev: 26.5.1
   hooks:
     - id: black
       # It is recommended to specify the latest version of Python
